@@ -21,5 +21,5 @@ function explosion:update(dt)
 end
 
 function explosion:draw()
-	love.graphics.drawq(explosionimg, explosionquad[self.quad], self.x*scale, self.y*scale, 0, 0.375*scale, 0.375*scale)
+	love.graphics.draw(love.graphics.newImage(explosionimg), explosionquad[self.quad], self.x*scale, self.y*scale, 0, 0.375*scale, 0.375*scale)
 end

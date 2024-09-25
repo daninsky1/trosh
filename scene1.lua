@@ -111,15 +111,15 @@ function scene1_update(dt)
 end
 
 function playermovement1(dt)
-	if love.keyboard.isDown("left") then
+	if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
 		playerx = math.max(0, playerx-dt*movement1speed)
-	elseif love.keyboard.isDown("right") then
+	elseif love.keyboard.isDown("right") or love.keyboard.isDown("d") then
 		playerx = math.min(100, playerx+dt*movement1speed)
 	end
 	
-	if love.keyboard.isDown("up") then
+	if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
 		playery = math.max(50, playery-dt*movement1speed)
-	elseif love.keyboard.isDown("down") then
+	elseif love.keyboard.isDown("down") or love.keyboard.isDown("s") then
 		playery = math.min(80, playery+dt*movement1speed)
 	end
 end
@@ -130,7 +130,7 @@ end
 
 function shootlaser()
 	if laserdelay == 0 then
-		table.insert(lasers, laser:new(playerx, playery-8))
+		table.insert(lasers, laser:new(playerx, playery-16))
 		lasersound:stop()
 		lasersound:play()
 		laserdelay = reallaserdelay
@@ -172,7 +172,7 @@ function scene1_draw()
 		rockets[1]:draw()
 	end
 	
-	love.graphics.drawq(playerimg, playerquad[playerframe], playerx*scale, playery*scale, 0, scale, scale, 7, 12)
+	love.graphics.draw(love.graphics.newImage(playerimg), playerquad[playerframe], playerx*scale, playery*scale, 0, scale, scale, 7, 12)
 	for i, v in pairs(lasers) do
 		v:draw()
 	end

@@ -88,7 +88,7 @@ function rocket:update(dt)
 			
 			if wheatleytimer >= 0.95 and wheatleytimer - dt*2 < 0.95 then
 				table.insert(explosions, explosion:new(self.x-20, self.y-20))
-				rocketimg = love.graphics.newImage("graphics/rocketkaputt.png")
+				rocketimg = love.image.newImageData("graphics/rocketkaputt.png")
 				changegamestate("scene4")
 				self.hit = true
 				self.inflight = false

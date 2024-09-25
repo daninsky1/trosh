@@ -19,5 +19,5 @@ function splatter:update(dt)
 end
 
 function splatter:draw()
-	love.graphics.drawq(splatterimg, splatterquad[self.quad], self.x*scale, self.y*scale, 0, scale/2, scale/2, 40, 40)
+	love.graphics.draw(love.graphics.newImage(splatterimg), splatterquad[self.quad], self.x*scale, self.y*scale, 0, scale/2, scale/2, 40, 40)
 end

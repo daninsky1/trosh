@@ -1,6 +1,5 @@
 function love.load()
-	love.graphics.setDefaultImageFilter("nearest", "nearest")
-	
+	love.graphics.setDefaultFilter("nearest", "nearest")
 	require "class"
 	require "menu"
 	require "cloud"
@@ -24,15 +23,39 @@ function love.load()
 	require "bullet"
 	require "bird"
 	
-	love.graphics.setIcon( love.graphics.newImage("graphics/icon.png") )
-	imagelist = {"title", "cloud1", "cloud2", "ground", "bush1", "bush2", "powerup", "rocket", "star", "asteroid-big1", "sunglasses", "awesome", "arrow", "groundwin",
-				"asteroid-big2", "asteroid-small1", "asteroid-small2", "bullet", "littleexplosion", "warning", "wheatley", "alert", "randomshit", "bird"}
+	love.window.setIcon( love.image.newImageData("graphics/icon.png") )
+	imagelist = {
+		"title",
+		"cloud1",
+		"cloud2",
+		"ground",
+		"bush1",
+		"bush2",
+		"powerup",
+		"rocket",
+		"star",
+		"asteroid-big1",
+		"sunglasses",
+		"awesome",
+		"arrow",
+		"groundwin",
+		"asteroid-big2",
+		"asteroid-small1",
+		"asteroid-small2",
+		"bullet",
+		"littleexplosion",
+		"warning",
+		"wheatley",
+		"alert",
+		"randomshit",
+		"bird"
+	}
 	
 	for i = 1, #imagelist do
-		_G[imagelist[i] .. "img"] = love.graphics.newImage("graphics/" .. imagelist[i] .. ".png")
+		_G[imagelist[i] .. "img"] = love.image.newImageData("graphics/" .. imagelist[i] .. ".png")
 	end
 	
-	fontimage = love.graphics.newImage("graphics/font.png")
+	fontimage = love.image.newImageData("graphics/font.png")
 	
 	fontglyphs = "0123456789abcdefghijklmnopqrstuvwxyz.:/,'C-_>* !{}?"
 	fontquads = {}
@@ -40,16 +63,16 @@ function love.load()
 		fontquads[string.sub(fontglyphs, i, i)] = love.graphics.newQuad((i-1)*8, 0, 8, 8, 408, 8)
 	end
 	
-	playerimg = love.graphics.newImage("graphics/trosh.png")
+	playerimg = love.image.newImageData("graphics/trosh.png")
 	playerquad = {love.graphics.newQuad(0, 0, 14, 25, 54, 25), love.graphics.newQuad(14, 0, 14, 25, 54, 25), love.graphics.newQuad(28, 0, 26, 12, 54, 25), love.graphics.newQuad(28, 12, 26, 12, 54, 25)}
 	
-	winplayerimg = love.graphics.newImage("graphics/troshwin.png")
+	winplayerimg = love.image.newImageData("graphics/troshwin.png")
 	winplayerquad = {}
 	for x = 1, 4 do
 		winplayerquad[x] = love.graphics.newQuad((x-1)*11, 0, 11, 26, 44, 26)
 	end
 	
-	enemyimg = love.graphics.newImage("graphics/enemy.png")
+	enemyimg = love.image.newImageData("graphics/enemy.png")
 	enemyquad = {}
 	for y = 1, 4 do
 		for x = 1, 4 do
@@ -57,7 +80,7 @@ function love.load()
 		end
 	end
 	
-	explosionimg = love.graphics.newImage("graphics/explosion.png")
+	explosionimg = love.image.newImageData("graphics/explosion.png")
 	explosionquad = {}
 	for y = 1, 5 do
 		for x = 1, 5 do
@@ -65,7 +88,7 @@ function love.load()
 		end
 	end
 	
-	bigexplosionimg = love.graphics.newImage("graphics/bigexplosion.png")
+	bigexplosionimg = love.image.newImageData("graphics/bigexplosion.png")
 	bigexplosionquad = {}
 	for y = 1, 5 do
 		for x = 1, 5 do
@@ -73,7 +96,7 @@ function love.load()
 		end
 	end
 	
-	splatterimg = love.graphics.newImage("graphics/splatter.png")
+	splatterimg = love.image.newImageData("graphics/splatter.png")
 	splatterquad = {}
 	for x = 1, 6 do
 		splatterquad[x] = love.graphics.newQuad((x-1)*64, 0, 64, 64, 384, 64)
@@ -82,13 +105,13 @@ function love.load()
 	birdquad = {love.graphics.newQuad(0, 0, 29, 16, 29, 32), love.graphics.newQuad(0, 16, 29, 16, 29, 32)}
 	
 	scale = 8
-	local w, h = love.graphics.getMode()
+	local w, h = love.window.getMode()
 	if w ~= 100*scale or h ~= 80*scale then
-		love.graphics.setMode(100*scale, 80*scale, false, true, 16)
+		love.window.setMode(100*scale, 80*scale, false, true, 16)
 	end
-	love.graphics.setIcon( love.graphics.newImage("graphics/icon.png") )
+	love.window.setIcon( love.image.newImageData("graphics/icon.png") )
 	
-	bgmusic = love.audio.newSource("audio/trosong.ogg")
+	bgmusic = love.audio.newSource("audio/trosong.ogg", "static")
 	bgmusic:setLooping(true)
 	lasersound = love.audio.newSource("audio/laser.wav", "static")
 	bigexplosionsound = love.audio.newSource("audio/bigexplosion.ogg", "static")
@@ -99,7 +122,7 @@ function love.load()
 	sunglassessound = love.audio.newSource("audio/sunglasses.ogg", "static")
 	splat = love.audio.newSource("audio/splat.ogg", "static")
 	ding = love.audio.newSource("audio/ding.ogg", "static")
-	credits = love.audio.newSource("audio/credits.ogg")
+	credits = love.audio.newSource("audio/credits.ogg", "static")
 	approach = love.audio.newSource("audio/approach.ogg", "static")
 	credits:setLooping(true)
 	
@@ -206,7 +229,6 @@ function love.draw()
 	
 	love.graphics.translate(-shake*scale/4, -shake*scale/4)
 	
-	
 	love.graphics.translate(50*scale, 40*scale)
 	love.graphics.rotate(-shake/300)
 	love.graphics.translate(-50*scale, -40*scale)
@@ -222,7 +244,7 @@ function love.keypressed(key, unicode)
 		_G[gamestate .. "_keypressed"](key, unicode)
 	end
 	
-	if key ~= "left" and key ~= "up" and key ~= "right" and key ~= "down" then
+	if key ~= "left" and key ~= "up" and key ~= "right" and key ~= "down" and key ~= "a" and key ~= "w" and key ~= "d" and key ~= "" then
 		if _G[gamestate .. "_action"] then
 			_G[gamestate .. "_action"](key)
 		end
@@ -249,7 +271,7 @@ function draw(drawable, x, y, r, sx, sy, ox, oy, kx, ky)
 	if not sy then
 		sy = 1
 	end
-	love.graphics.draw(drawable, x*scale, y*scale, r, sx*scale, sy*scale, ox, oy, kx, ky )
+	love.graphics.draw(love.graphics.newImage(drawable), x*scale, y*scale, r, sx*scale, sy*scale, ox, oy, kx, ky )
 end
 
 function round(num, idp) --Not by me
@@ -267,7 +289,7 @@ function properprint(s, x, y, sc)
 		else
 			local char = string.sub(s, i, i)
 			if fontquads[char] then
-				love.graphics.drawq(fontimage, fontquads[char], x*scale+((i-1)*8+1)*sc, y*scale, 0, sc, sc)
+				love.graphics.draw(love.graphics.newImage(fontimage), fontquads[char], x*scale+((i-1)*8+1)*sc, y*scale, 0, sc, sc)
 			end
 		end
 	end
